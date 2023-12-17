@@ -71,8 +71,7 @@ class LocalRag:
         except Exception as e:
             raise ValueError("Error while reading docx document.") from e
 
-    @staticmethod
-    def create_batch_embeddings(pdf_in, doc_id):
+    def create_batch_embeddings(self, pdf_in, doc_id):
         if pdf_in is None or not isinstance(pdf_in, list):
             raise ValueError("Invalid pdf_in. It should be a list of paragraphs.")
 
@@ -80,7 +79,7 @@ class LocalRag:
             raise ValueError("Invalid doc_id. It cannot be None.")
 
         try:
-            embedding_class = EmbeddingClass()
+            embedding_class = EmbeddingClass(self.config_file)
 
             # Create vector batch
             emb_list = [{"text": item["paragraph"]} for item in pdf_in]
@@ -115,7 +114,7 @@ class LocalRag:
         if doc_id is None or not isinstance(doc_id, str) or doc_id == "":
             raise ValueError("Invalid doc_id. It cannot be None or an empty string.")
 
-        embedding_class = EmbeddingClass()
+        embedding_class = EmbeddingClass(self.config_file)
         vec_db = VectorDatabase(self.config_file, doc_id)
 
         query_emb = embedding_class.return_embedding(prompt)
