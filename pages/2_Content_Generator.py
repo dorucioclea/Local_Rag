@@ -3,7 +3,7 @@ import streamlit as st
 
 st.title("Content Generator")
 
-config_file = "config.yaml"
+config_file = "config_real.yaml"
 rag_class = LocalRag(config_file)
 
 # Get the documents on file

@@ -12,7 +12,7 @@ def save_uploaded_file(directory, file):
         f.write(file.getbuffer())
 
 
-config_file = "config.yaml"
+config_file = "config_real.yaml"
 rag_class = LocalRag(config_file)
 
 # Page setup

@@ -100,7 +100,7 @@ class EmbeddingClass:
     def __init__(self, config_file):
         with open(config_file, 'r') as stream:
             data_loaded = yaml.safe_load(stream)
-        self._batch_size = data_loaded["batch_size"]
+        self._batch_size = data_loaded["embedding_batches"]
         self._model = AnglE.from_pretrained('WhereIsAI/UAE-Large-V1', pooling_strategy='cls').cuda()
         self._model.set_prompt(prompt=Prompts.C)
 
