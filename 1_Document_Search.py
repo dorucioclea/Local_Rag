@@ -1,9 +1,14 @@
 from local_rag import LocalRag
+import os
 import streamlit as st
 
 st.title("Document Search")
 
-config_file = "config_real.yaml"
+if os.path.isfile("config_real.yaml"):
+    config_file = "config_real.yaml"
+else:
+    config_file = "config.yaml"
+
 rag_class = LocalRag(config_file)
 
 # Get the documents on file
