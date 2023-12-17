@@ -97,14 +97,16 @@ class EmbeddingClass:
 
     """
 
-    def __init__(self):
+    def __init__(self, config_file):
+        with open(config_file, 'r') as stream:
+            data_loaded = yaml.safe_load(stream)
+        self._batch_size = data_loaded["batch_size"]
         self._model = AnglE.from_pretrained('WhereIsAI/UAE-Large-V1', pooling_strategy='cls').cuda()
         self._model.set_prompt(prompt=Prompts.C)
 
     def batch_embedding(self, prompt_batch: list) -> list:
-        # Split the prompt_batch into chunks of 64 entries into embedding
-        chunk_size = 64
-        prompt_chunks = [prompt_batch[i:i + chunk_size] for i in range(0, len(prompt_batch), chunk_size)]
+        # Split the prompt_batch into batches of 64 entries into embedding
+        prompt_chunks = [prompt_batch[i:i + self._batch_size] for i in range(0, len(prompt_batch), self._batch_size)]
 
         # Process each chunk and accumulate the results
         batch_encodings = []
