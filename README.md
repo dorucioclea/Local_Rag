@@ -47,8 +47,9 @@ To get started with Local Rag, follow the steps below:
    stream: False
    ```
 5. Sign up for a free Supabase account
-6. Set up your database to populate the .yaml file, you will need to make sure vecs are enable on Supabase
-   ```markdown
+6. Set up your databases, you will need to make sure vecs are enable on Supabase. The app will create the tables for you, you just need to enable vecs and make the project and database.
+7. Modify the .yaml file with your Supabase database and other relevant details.
+```markdown
    # Supabase postgres login
    database_name:
    user:
@@ -56,7 +57,6 @@ To get started with Local Rag, follow the steps below:
    host:
    db_port:
    ```
-7. Modify the .yaml file with your Supabase database and other relevant details.
 
 ## Usage
 
