@@ -6,6 +6,8 @@ In addition, two advanced RAG features are included, small-to-big document chunk
 
 Local Rag offers two outputs based on your query, document question answering and the ability to generate a post/content based on your search query on the documents.
 
+<img src="https://github.com/puredatum/Local_Rag/blob/master/images/Screenshot_20231217_195504.png" alt="Alt text" title="Optional title">
+
 ## Description
 
 **Features**
