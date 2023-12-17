@@ -30,6 +30,7 @@ Local Rag offers two outputs based on your query, document question answering an
 
 **Future Features**
 - Enable chat with conversation history as additional context
+- A docker container
 
 ## Setup & Installation
 To get started with Local Rag, follow the steps below:
