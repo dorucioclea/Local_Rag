@@ -1,0 +1,11 @@
+streamlit
+vecs
+pydantic
+numpy
+requests
+torch
+transformers
+PyPDF2
+nltk
+PyYAML
+python-docx

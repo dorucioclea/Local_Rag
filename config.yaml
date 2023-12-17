@@ -1,0 +1,21 @@
+# Table names
+doc_text_table: doc_text_table
+paragraph_table: paragraph_table
+
+# Supabase postgres login
+database_name:
+user:
+password:
+host:
+db_port:
+
+#Ollama LLM
+model_name: mistral
+ollama_api_url: http://localhost:11434/api/generate
+temperature: 0
+stream: False
+
+# Other items
+vector_dim: 1024
+temp_doc_storage: temp_doc_storage
+embedding_batches: 64
