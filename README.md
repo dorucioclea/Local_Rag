@@ -1,6 +1,6 @@
 # Local Rag
 
-Local Rag is a fully local Retrieval Augmented Generation (RAG) system that uses Streamlit as the front end, Ollama and Transformers for the inference and Supabase for the database. This project offers an efficient, local, and private RAG system. It is specifically designed to query single or multiple documents held inside named groups, so groups of PDF/txt/docx in a specific category for example. Following this, it is easy to add new groups or add to existing groups. When the sources are retrieved and processed, the AI output is supplied with the included sources.
+Local Rag uses local machine learning models for Retrieval Augmented Generation (RAG). The stack is Streamlit as the front end, Ollama and Transformers for the inference and Supabase for the database. This project offers an efficient, local, and private RAG system. It is specifically designed to query single or multiple documents held inside named groups, so groups of PDF/txt/docx in a specific category for example. Following this, it is easy to add new groups or add to existing groups. When the sources are retrieved and processed, the AI output is supplied with the included sources.
 
 In addition, two advanced RAG features are included, small-to-big document chunking and retrieval re-ranking.
 
