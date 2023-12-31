@@ -61,7 +61,7 @@ if check_yaml_population(config_file, required_keys):
     # Chunking option for uploading document
     chunking_options = {
         'Simple': 'simple',
-        'Small to big': 'small_to_big'
+        'Small to big': 'smalltobig'
     }
     chunk_option = st.radio("Document chunking strategy:", options=chunking_options)
     chunk_strategy = chunking_options[chunk_option]

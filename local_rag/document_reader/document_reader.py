@@ -134,7 +134,7 @@ class DocumentReader:
             page_chunks, paragraph_keys = self._split_text_into_chunks(page, chunk_size, overlap)
             big_string_list = page_chunks
 
-        if chunk_strategy == "small_to_big":
+        if chunk_strategy == "smalltobig":
             page_chunks, paragraph_keys, big_string_list = self._split_text_into_sentences(page)
 
         return page_chunks, paragraph_keys, big_string_list
