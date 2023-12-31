@@ -72,7 +72,7 @@ To get started with Local Rag, follow the steps below:
 The Local Rag project is designed with a user-friendly interface and easy maneuvering. Once you've successfully followed the setup and installation steps, you can start using it for your document management. 
 
 Running steps:
-1. Make sure Ollama is running and Supabase is set up properly, with the yaml file populated
+1. Make sure Ollama is running and Supabase is set up properly, with the settings for your database set
 2. Start the streamlit server by running the below in the terminal
 ```markdown
 streamlit run 1_Document_Search.py
