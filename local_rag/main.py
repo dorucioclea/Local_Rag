@@ -14,9 +14,6 @@ class LocalRag:
         self.document_reader_instance = DocumentReader()
 
     def document_reader(self, load_func_str, file_name, doc_name, chunk_strategy, add_to_doc=False):
-        if not file_name or not os.path.isfile(f"{self.temp_storage}/{file_name}"):
-            raise ValueError("Invalid file_name. Make sure file_name is provided and file exists.")
-
         if not doc_name:
             raise ValueError("doc_name cannot be empty.")
 
@@ -53,6 +50,28 @@ class LocalRag:
 
         return paragraph_list, paragraph_keys, doc_id
 
+    def youtube_reader_helper(self, file_name, doc_name, chunk_strategy, add_to_doc=False):
+        document_db = DocumentDB(self.config_file)
+        paragraph_list, paragraph_keys, doc_id, big_string_list = self.document_reader_instance.load_youtube(file_name, chunk_strategy)
+
+        if not add_to_doc:
+            try:
+                document_db.add_document(doc_name, doc_id, chunk_strategy)
+            except Exception as e:
+                raise ValueError("Error in add_document execution.") from e
+
+        try:
+            doc_text_db = DocumentTextDB(self.config_file)
+            data_in = []
+
+            for paragraph_id, paragraph in zip(paragraph_keys, big_string_list):
+                data_in.append((doc_name, doc_id, paragraph_id, paragraph))
+            doc_text_db.add_bulk_documents(data_in)
+        except Exception as e:
+            raise ValueError("Error in adding document texts.") from e
+
+        return paragraph_list, paragraph_keys, doc_id
+
     def pdf_document_reader(self, file_name, doc_name, chunk_strategy, add_to_doc=False):
         try:
             return self.document_reader("load_pdf", file_name, doc_name, chunk_strategy, add_to_doc)
@@ -70,6 +89,12 @@ class LocalRag:
             return self.document_reader("load_docx", file_name, doc_name, chunk_strategy, add_to_doc)
         except Exception as e:
             raise ValueError("Error while reading docx document.") from e
+
+    def youtube_reader(self, file_name, doc_name, chunk_strategy, add_to_doc=False):
+        try:
+            return self.youtube_reader_helper(file_name, doc_name, chunk_strategy, add_to_doc)
+        except Exception as e:
+            raise ValueError("Error while reading pdf document.") from e
 
     def create_batch_embeddings(self, pdf_in, doc_id):
         if pdf_in is None or not isinstance(pdf_in, list):

@@ -9,3 +9,4 @@ PyPDF2
 nltk
 PyYAML
 python-docx
+youtube-transcript-api

@@ -1,76 +1,108 @@
 from local_rag import LocalRag
 import os
+import yaml
 import streamlit as st
 
+st.set_page_config(page_title="Document Search")
 st.title("Document Search")
-
+st.subheader("Search your document stores to answer questions.")
+st.write("Your document stores are an aggregate of all the documents and YouTube videos you upload into them.")
 if os.path.isfile("config_real.yaml"):
     config_file = "config_real.yaml"
 else:
     config_file = "config.yaml"
 
-rag_class = LocalRag(config_file)
+required_keys = ["database_name", "user", "password", "host", "db_port", "embedding_batches",
+                 "model_name", "ollama_api_url", "temperature"]
 
-# Get the documents on file
-document_list = rag_class.get_sql_documents() 
 
-if document_list != []:
-	query = st.chat_input("What do you want to know")
-	
-	pdf_mapping = {entry[1]: entry[2] for entry in document_list}
+def check_yaml_population(yaml_file, required_keys):
+    try:
+        with open(yaml_file, 'r') as file:
+            data = yaml.safe_load(file)
 
-	# Create a dropdown menu
-	selected_pdf_name = st.selectbox("Select a document", options=list(pdf_mapping.keys()))
+        if not data:
+            return False
 
-	# Display the selected PDF ID
-	selected_pdf_id = pdf_mapping[selected_pdf_name]
+        for key in required_keys:
+            if key not in data or data[key] is None:
+                return False
 
-	k = st.slider("Sources to retrieve.", 1 , 10, 5)
+            elif data[key] == '':
+                return False
 
-	# Chunking option for uploading document
-	reranking_option = {
-		'No reranking': 'no',
-		'Reranking': 'rerank'
-	}
-	rank_option = st.radio("Select reranking:", options=reranking_option)
-	rank_strategy = reranking_option[rank_option]
+        return True
+    except Exception as e:
+        print(f"Error checking YAML file: {e}")
+        return False
 
-	if query:
-		st.write(f"User: {query}")
 
-		with st.status("Answering query...", expanded=True) as status:
-			# Reranking strategy and setting K depending on it
-			st.write("Searching for results...")
-			if rank_strategy == "rerank":
-				paragraph_id_list, cosine_results = rag_class.retrieve_documents(query, k*4, selected_pdf_id)
-			else:
-				paragraph_id_list, cosine_results = rag_class.retrieve_documents(query, k, selected_pdf_id)
+if check_yaml_population(config_file, required_keys):
+    rag_class = LocalRag(config_file)
 
-			# Getting sources
-			st.write("Searching for sources...")
-			sources_list = rag_class.get_paragraph_sources(paragraph_id_list)
+    # Get the documents on file
+    document_list = rag_class.get_sql_documents()
 
-			# Reranking strategy
-			if rank_strategy == "rerank":
-				st.write("Re-ranking sources...")
-				sorted_sources = rag_class.rerank_sources(query, sources_list)
-				sorted_sources = sorted_sources[:k]
-				context_for_llm = "".join(sorted_sources)
-			else:
-				sorted_sources = sources_list
-				context_for_llm = "".join(sources_list)
+    if document_list != []:
+        query = st.chat_input("What do you want to know")
 
-			# Send to LLM
-			st.write("Sending to AI...")
-			answer = rag_class.make_llm_request(query, context_for_llm)
-			status.update(label="Answer found!", state="complete", expanded=False)
+        pdf_mapping = {entry[2]: entry[3] for entry in document_list}
 
-		with st.chat_message("assistant"):
-			st.write(answer)
+        # Create a dropdown menu
+        selected_pdf_name = st.selectbox("Select a document", options=list(pdf_mapping.keys()))
 
-		for idx, item in enumerate(sorted_sources):
-			with st.expander(f"Source {idx + 1}"):
-				st.markdown(item)
+        # Display the selected PDF ID
+        selected_pdf_id = pdf_mapping[selected_pdf_name]
+
+        k = st.slider("Sources to retrieve.", 1, 10, 5)
+
+        # Chunking option for uploading document
+        reranking_option = {
+            'No reranking': 'no',
+            'Reranking': 'rerank'
+        }
+        rank_option = st.radio("Select reranking:", options=reranking_option)
+        rank_strategy = reranking_option[rank_option]
+
+        if query:
+            st.write(f"User: {query}")
+
+            with st.status("Answering query...", expanded=True) as status:
+                # Reranking strategy and setting K depending on it
+                st.write("Searching for results...")
+                if rank_strategy == "rerank":
+                    paragraph_id_list, cosine_results = rag_class.retrieve_documents(query, k * 4, selected_pdf_id)
+                else:
+                    paragraph_id_list, cosine_results = rag_class.retrieve_documents(query, k, selected_pdf_id)
+
+                # Getting sources
+                st.write("Searching for sources...")
+                sources_list = rag_class.get_paragraph_sources(paragraph_id_list)
+
+                # Reranking strategy
+                if rank_strategy == "rerank":
+                    st.write("Re-ranking sources...")
+                    sorted_sources = rag_class.rerank_sources(query, sources_list)
+                    sorted_sources = sorted_sources[:k]
+                    context_for_llm = "".join(sorted_sources)
+                else:
+                    sorted_sources = sources_list
+                    context_for_llm = "".join(sources_list)
+
+                # Send to LLM
+                st.write("Sending to AI...")
+                answer = rag_class.make_llm_request(query, context_for_llm)
+                status.update(label="Answer found!", state="complete", expanded=False)
+
+            with st.chat_message("assistant"):
+                st.write(answer)
+
+            for idx, item in enumerate(sorted_sources):
+                with st.expander(f"Source {idx + 1}"):
+                    st.markdown(item)
+
+    else:
+        st.markdown("Please upload some documents.")
 
 else:
-	st.markdown("Please upload some documents.")
+    st.write("Your settings are not filled out correctly.")

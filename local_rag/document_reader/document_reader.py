@@ -3,6 +3,7 @@ import secrets
 import string
 import nltk
 from nltk.tokenize import sent_tokenize
+from youtube_transcript_api import YouTubeTranscriptApi
 from docx import Document
 
 
@@ -59,6 +60,20 @@ class DocumentReader:
         key_id = ''.join(secrets.choice(characters) for _ in range(20))
 
         return key_id
+
+    @staticmethod
+    def _get_transcript_api(video_id) -> str:
+        transcript = YouTubeTranscriptApi.get_transcript(video_id)
+        transcript_text = ""
+
+        for idx, line in enumerate(transcript):
+            if idx % 3 == 0 and idx != 0:
+                transcript_text = transcript_text + ". " + line["text"]
+
+            else:
+                transcript_text = transcript_text + "" + line["text"]
+
+        return transcript_text
 
     def _split_text_into_chunks(self, text, chunk_size, overlap) -> tuple[list[str], list[str]]:
         words = text.split()
@@ -185,6 +200,16 @@ class DocumentReader:
         text_docx = "".join([item for item in list_docx])
 
         page_chunks, paragraph_keys, big_string_list = self._text_splitter(text_docx, chunk_strategy)
+        paragraph_list = self._make_paragraph_list(page_chunks, doc_id)
+
+        return paragraph_list, paragraph_keys, doc_id, big_string_list
+
+    def load_youtube(self, youtube_id, chunk_strategy) -> tuple[list[dict[str, str]], list[str], str, list[str]]:
+        doc_id = self._doc_key_gen()
+        text_video = self._get_transcript_api(youtube_id)
+
+        page_chunks, paragraph_keys, big_string_list = self._text_splitter(text_video, chunk_strategy)
+
         paragraph_list = self._make_paragraph_list(page_chunks, doc_id)
 
         return paragraph_list, paragraph_keys, doc_id, big_string_list
