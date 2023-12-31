@@ -1,6 +1,6 @@
 # Local Rag
 
-Local Rag uses local machine learning models for Retrieval Augmented Generation (RAG). The stack is Streamlit as the front end, Ollama and Transformers for the inference and Supabase for the database. This project offers an efficient, local, and private RAG system. It is specifically designed to query single or multiple documents held inside named groups, so groups of PDF/txt/docx in a specific category for example. Following this, it is easy to add new groups or add to existing groups. When the sources are retrieved and processed, the AI output is supplied with the included sources.
+Local Rag uses local machine learning models for Retrieval Augmented Generation (RAG). The stack is Streamlit as the front end, Ollama and Transformers for the inference and Supabase for the database. This project offers an efficient, local, and private RAG system. The design is to keep document stores under names, in each store you can add in documents which can be searched. The idea is to aggregate specific information from different sources to search. You can upload PDF/txt/docx as well as YouTube video subtitles when you supply video id.
 
 In addition, two advanced RAG features are included, small-to-big document chunking and retrieval re-ranking.
 
@@ -11,6 +11,7 @@ Local Rag offers two outputs based on your query, document question answering an
 ## Description
 
 **Features**
+- Upload and embed PDF/txt/docx as well as YouTube video subtitles
 - Select your LLM model for any models on Ollama
 - Simple document chunking. This chunks the sources and embeds the chunk, upon retrieval the entire embedded chunk is used for synthesis
 - The Transformers package is used for embedding and retrieval re-ranking
@@ -84,3 +85,7 @@ Contributors are always welcome to Local Rag. I appreciate any input that aids i
 ## License
 
 Local Rag is licensed under the open-source license.
+
+## UPDATE 31/12/2023
+1. I have included YouTube video embedding into the RAG application. This essentially uses the YouTube Subtitles API to get the subtitles, the subtitles are then embedded into the RAG application
+2. Settings menue to edit the yaml file, this makes it easier to add in your postgress database information. From here you can select your own Ollama models as well.
