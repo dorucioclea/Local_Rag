@@ -2,7 +2,7 @@
 1. I have included YouTube video embedding into the RAG application. This essentially uses the YouTube Subtitles API to get the subtitles, the subtitles are then embedded into the RAG application
 2. Settings menue to edit the yaml file, this makes it easier to add in your postgress database information. From here you can select your own Ollama models as well.
 
-(---)
+---
 
 # Local Rag
 
