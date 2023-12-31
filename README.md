@@ -1,3 +1,9 @@
+## UPDATE 31/12/2023
+1. I have included YouTube video embedding into the RAG application. This essentially uses the YouTube Subtitles API to get the subtitles, the subtitles are then embedded into the RAG application
+2. Settings menue to edit the yaml file, this makes it easier to add in your postgress database information. From here you can select your own Ollama models as well.
+
+(---)
+
 # Local Rag
 
 Local Rag uses local machine learning models for Retrieval Augmented Generation (RAG). The stack is Streamlit as the front end, Ollama and Transformers for the inference and Supabase for the database. This project offers an efficient, local, and private RAG system. The design is to keep document stores under names, in each store you can add in documents which can be searched. The idea is to aggregate specific information from different sources to search. You can upload PDF/txt/docx as well as YouTube video subtitles when you supply video id.
@@ -85,7 +91,3 @@ Contributors are always welcome to Local Rag. I appreciate any input that aids i
 ## License
 
 Local Rag is licensed under the open-source license.
-
-## UPDATE 31/12/2023
-1. I have included YouTube video embedding into the RAG application. This essentially uses the YouTube Subtitles API to get the subtitles, the subtitles are then embedded into the RAG application
-2. Settings menue to edit the yaml file, this makes it easier to add in your postgress database information. From here you can select your own Ollama models as well.
