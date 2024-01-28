@@ -89,4 +89,4 @@ Contributors are always welcome to Local Rag. I appreciate any input that aids i
 
 ## License
 
-Local Rag is licensed under the open-source license.
+Local Rag is licensed the MIT license.
